@@ -2,11 +2,13 @@ describe(`Central de Atendimento ao Cliente TAT`, () => {
   beforeEach(() => cy.visit(`./src/index.html`))
 
   it(`displays the application title`, () => {
+    cy.clock()
     cy.title().should('eq', 'Central de Atendimento ao Cliente TAT')
+    cy.tick(3000)
   })
   it('successfully submits the form with valid data', () => {
     const longText = Cypress._.repeat('hfahkfhafjkahfjkhfhfahkfhafjkahfjkhf', 10)
-
+    cy.clock()
     cy.get(`#firstName`).type(`Luiza`)
     cy.get(`#lastName`).type(`Takenaka`)
     cy.get(`#email`).type(`luiza.takenaka@example.com`)
@@ -15,15 +17,21 @@ describe(`Central de Atendimento ao Cliente TAT`, () => {
     cy.get(':nth-child(6) > label > strong').should(`be.visible`)
     cy.get('#open-text-area').type(longText, { delay: 0 })
     cy.contains('button', 'Enviar').click()
+
     cy.get('.success > strong').should('be.visible')
+    cy.tick(3000)
   })
   it('displays an error message when submitting the form with an invalid email address', () => {
+    cy.clock()
     cy.get(`#firstName`).type(`Luiza`)
     cy.get(`#lastName`).type(`Takenaka`)
     cy.get(`#email`).type(`email invalido`)
     cy.get('#open-text-area').type('Teste')
     cy.contains('button', 'Enviar').click()
+
     cy.get('.error').should('be.visible')
+    cy.tick(3000)
+    cy.get('.error').should('not.be.visible')
   })
 
   it('keeps the phone field empty when non-numeric characters are entered', () => {
@@ -31,11 +39,15 @@ describe(`Central de Atendimento ao Cliente TAT`, () => {
     cy.get('#phone').should('have.value', '')
   })
   it('displays an error message when submitting the form without an email address', () => {
+    cy.clock()
     cy.get(`#firstName`).type(`Luiza`)
     cy.get(`#lastName`).type(`Takenaka`)
     cy.get('#open-text-area').type('Teste')
     cy.contains('button', 'Enviar').click()
+
     cy.get('.error').should('be.visible')
+    cy.tick(3000)
+    cy.get('.error').should('not.be.visible')
   })
 
   it('clears the first name field successfully', () => {
@@ -43,32 +55,34 @@ describe(`Central de Atendimento ao Cliente TAT`, () => {
       .should(`have.value`, `Luiza`)
       .clear()
       .should(`have.value`, ``)
-
   })
   it('clears the last name field successfully', () => {
     cy.get(`#lastName`).type(`Takenaka`)
       .should(`have.value`, `Takenaka`)
       .clear()
       .should(`have.value`, ``)
-
   })
   it('clears the phone field successfully', () => {
     cy.get(`#phone`).type(`31994312607`)
       .should(`have.value`, `31994312607`)
       .clear()
       .should(`have.value`, ``)
-
   })
   it('displays an error message when submitting the form without filling in the required fields', () => {
+    cy.clock()
     cy.contains('button', 'Enviar').click()
     cy.get('.error').should('be.visible')
+    cy.tick(3000)
+    cy.get('.error').should('not.be.visible')
   })
 
 
   it('successfully submits the form using a custom command', () => {
+    cy.clock()
     cy.fillMandatoryFieldsAndSubmit()
 
     cy.get('.success').should('be.visible')
+    cy.tick(3000)
   })
 
   it('selects the YouTube product by visible text', () => {
@@ -93,7 +107,6 @@ describe(`Central de Atendimento ao Cliente TAT`, () => {
         cy.wrap(typeOfservice)
           .check()
           .should('be.checked')
-
       })
   })
 
@@ -104,6 +117,7 @@ describe(`Central de Atendimento ao Cliente TAT`, () => {
           .check()
           .should('be.checked')
           .uncheck()
+          .should('not.be.checked')
       })
   })
 
@@ -114,7 +128,6 @@ describe(`Central de Atendimento ao Cliente TAT`, () => {
       .last()
       .uncheck()
       .should('not.be.checked')
-
   })
   it('uploads a file successfully', () => {
     cy.get('#file-upload')
