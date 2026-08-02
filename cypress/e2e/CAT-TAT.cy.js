@@ -162,7 +162,7 @@ describe(`Central de Atendimento ao Cliente TAT`, () => {
       .click()
     cy.contains('h1', 'CAC TAT - Política de Privacidade').should('be.visible')
   })
-  it('exibe e oculta as mensagens de sucesso e erro usando . invoke()', () => {
+  it('shows and hides success and error messages using .invoke()', () => {
     cy.get('.success')
         .should('not.be.visible')
         .invoke('show')
@@ -178,12 +178,12 @@ describe(`Central de Atendimento ao Cliente TAT`, () => {
         .invoke('hide')
         .should('not.be.visible')
     })
-    it('preenche o campo da area de texto usando o comando invoke', () => {
+    it('fills the text area using the invoke command', () => {
       cy.get('#open-text-area')
         .invoke('val', 'texto de teste')
         .should('have.value', 'texto de teste')
     })
-    it('faz uma requisição HTTP e valida a resposta', () => {
+    it('makes an HTTP request and validates the response', () => {
       cy.request('https://cac-tat.s3.eu-central-1.amazonaws.com/index.html')
       .as('getRequest')
       .its('status')
@@ -194,5 +194,13 @@ describe(`Central de Atendimento ao Cliente TAT`, () => {
       cy.get('@getRequest')
         .its('body')
         .should('include', 'CAC TAT')
+    })
+      it('finds the cat', () => {
+      cy.get('#cat')
+        .invoke('show')
+        .should('be.visible')
+      cy.get('#cat')
+        .invoke('hide')
+        .should('not.be.visible')
     })
   })
